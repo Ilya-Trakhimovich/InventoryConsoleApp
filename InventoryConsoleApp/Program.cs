@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Dynamic;
 
 namespace InventoryConsoleApp
@@ -57,6 +58,8 @@ namespace InventoryConsoleApp
                     Console.Clear();
                     MenuAction(chooseItem);
                     break;
+                default:
+                    break;
             }
             CheckKey();
         }
@@ -70,10 +73,20 @@ namespace InventoryConsoleApp
                     string productName = Console.ReadLine();
 
                     Console.WriteLine("Write count of product");
-                    int productCount = Int32.Parse(Console.ReadLine()); // check on "is digit"
+                    int productCount;
+
+                    while (!int.TryParse(Console.ReadLine(),out productCount))
+                    {
+                        Console.WriteLine("Write correct count");
+                    }
 
                     Console.WriteLine("Write product price");
-                    double productPrice = Double.Parse(Console.ReadLine());
+                    double productPrice;
+
+                    while (!double.TryParse(Console.ReadLine(), out productPrice))
+                    {
+                        Console.WriteLine("Please, write correct price");
+                    }
 
                     Product product = new Product(productName,productCount,productPrice);
 

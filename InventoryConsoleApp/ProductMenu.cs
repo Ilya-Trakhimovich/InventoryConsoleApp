@@ -11,6 +11,14 @@ namespace InventoryConsoleApp
         List<Product> _productsTemp = new List<Product>();
         private int chooseMenu;
 
+        enum ProductMenuItems
+        {
+            RemoveCountProducts,
+            RemoveProduct,
+            AddCountProduct,
+            ChangePrice
+        }
+
         public ProductMenu(int productNumber, List<Product> products)
         {
             _productsTemp = products;
@@ -65,27 +73,55 @@ namespace InventoryConsoleApp
 
         private void MenuItem(int item)
         {
+            int tempCount;
+
             switch (item)
             {
-                case 0:
-                    Console.WriteLine("Write count");
-                    _productsTemp[_productNumber]._count -= Int32.Parse(Console.ReadLine());
+                case (int)ProductMenuItems.RemoveCountProducts:
+                    
+                    Console.WriteLine("Write count to remove");
+
+                    while (!int.TryParse(Console.ReadLine(), out tempCount))
+                    {
+                        Console.WriteLine("Please write only one number");
+                    }
+                    _productsTemp[_productNumber]._count -= tempCount;
+
                     ShowProductInfo(_productNumber);
                     ShowMenu();
                     break;
-                case 1:
+
+                case (int)ProductMenuItems.RemoveProduct:
 
                     _productsTemp.RemoveAt(_productNumber);
                     break;
-                case 2:
+
+                case (int)ProductMenuItems.AddCountProduct:
+
                     Console.WriteLine("Write count to add");
-                    _productsTemp[_productNumber]._count += Int32.Parse(Console.ReadLine());
+
+                    while (!int.TryParse(Console.ReadLine(), out tempCount))
+                    {
+                        Console.WriteLine("Please write only one number");
+                    }
+                    _productsTemp[_productNumber]._count += tempCount;
+
                     ShowProductInfo(_productNumber);
                     ShowMenu();
                     break;
-                case 3:
+
+                case (int)ProductMenuItems.ChangePrice:
+
+                    double tempPrice;
+
                     Console.WriteLine("Write new price");
-                    _productsTemp[_productNumber]._price = Int32.Parse(Console.ReadLine());
+
+                    while (!Double.TryParse(Console.ReadLine(), out tempPrice))
+                    {
+                        Console.WriteLine("Please write only one number");
+                    }
+                    _productsTemp[_productNumber]._price = tempPrice;
+
                     ShowProductInfo(_productNumber);
                     ShowMenu();
                     break;

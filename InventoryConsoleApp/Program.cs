@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Dynamic;
 
 namespace InventoryConsoleApp
 {
     class Program
     {
         private static int chooseItem = 0;
+        static string[] nameMenuItems = new string[] { "Add to inventory", "Show Inventory" };
 
         static void Main(string[] args)
         {
@@ -16,10 +18,19 @@ namespace InventoryConsoleApp
         static void ShowMenu()
         {
             Console.Clear();
-            Console.WriteLine($"{MenuItems.AddToInventory}\n" +
-                              $"{MenuItems.ShowInventory}");
-            chooseItem = 0;
-            Console.SetCursorPosition(0,chooseItem);
+            for (int i = 0; i < nameMenuItems.Length; i++)
+            {
+                if (chooseItem == i)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"----->\t{nameMenuItems[i]}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else
+                {
+                    Console.WriteLine($"\t{nameMenuItems[i]}");
+                }
+            }
         }
 
         static void CheckKey()
@@ -27,12 +38,20 @@ namespace InventoryConsoleApp
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.DownArrow:
-                    chooseItem++;
-                    Console.SetCursorPosition(0,chooseItem);
+                    if (chooseItem < nameMenuItems.Length - 1)
+                    {
+                        chooseItem++;
+                        ShowMenu();
+                    }
+
                     break;
                 case ConsoleKey.UpArrow:
-                    chooseItem--;
-                    Console.SetCursorPosition(0,chooseItem);
+                    if (chooseItem > 0)
+                    {
+                        chooseItem--;
+                        ShowMenu();
+                    }
+
                     break;
                 case ConsoleKey.Enter:
                     Console.Clear();
@@ -59,11 +78,13 @@ namespace InventoryConsoleApp
                     Product product = new Product(productName,productCount,productPrice);
 
                     Inventory.AddToInventory(product);
+                    chooseItem = 0;
                     ShowMenu();
 
                     break;
                 case (int)MenuItems.ShowInventory:
                     Inventory.ShowInventory();
+                    chooseItem = 0;
                     ShowMenu();
 
                     break;

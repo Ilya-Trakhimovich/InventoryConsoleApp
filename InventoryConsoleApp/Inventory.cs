@@ -45,14 +45,24 @@ namespace InventoryConsoleApp
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.DownArrow:
-                    productChoose++;
-                    Console.SetCursorPosition(0,productChoose);
+                    if (productChoose < products.Count)
+                    {
+                        productChoose++;
+                        ShowInventory();
+                    }
+
                     CheckKey();
+                    
+
                     break;
 
                 case ConsoleKey.UpArrow:
-                    productChoose--;
-                    Console.SetCursorPosition(0,productChoose);
+                    if (productChoose > 1)
+                    {
+                        productChoose--;
+                        ShowInventory();
+                    }
+
                     CheckKey();
                     break;
 
@@ -63,28 +73,53 @@ namespace InventoryConsoleApp
                     ProductMenu productMenu = new ProductMenu(productChoose - 1,products);
                     productMenu.ShowProductInfo(productChoose - 1);
                     productMenu.ShowMenu();
+
                     products = productMenu.GetNewProductList();
+
+                    productChoose = 1;
                     ShowInventory();
-                    //    ProductMenu(productChoose-1);
                     break;
             }
         }
 
         public static void ShowInventory()
         {
-            Console.WriteLine("Press BackSpace to return in menu");
+            Console.Clear();
 
-            foreach (Product product in products)
+            if (products.Count > 0)
             {
-                Console.WriteLine($"Product name is {product._name}\t" +
-                                  $"Product count is {product._count}\t" +
-                                  $"Product price is {product._price}\t" +
-                                  $"Product id is {product._id}");
-            }
+                Console.WriteLine("Press BackSpace to return in menu");
 
-            Console.WriteLine("Press BackSpace to return in menu");
-            Console.SetCursorPosition(0,productChoose);
-            CheckKey();
+                for (var i = 0; i < products.Count; i++)
+                {
+                    Product product = products[i];
+
+                    if (productChoose - 1 == i)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"---->\tProduct name is {product._name}\t" +
+                                          $"Product count is {product._count}\t" +
+                                          $"Product price is {product._price}\t" +
+                                          $"Product id is {product._id}");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Product name is {product._name}\t" +
+                                          $"Product count is {product._count}\t" +
+                                          $"Product price is {product._price}\t" +
+                                          $"Product id is {product._id}");
+                    }
+                }
+
+                Console.WriteLine("Press BackSpace to return in menu");
+                CheckKey();
+            }
+            else
+            {
+                Console.WriteLine("Inventory is empty. Press any key to back in main menu");
+                Console.ReadKey();
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace InventoryConsoleApp
             }
         }
 
-        public static bool ProductExist(Product product,out Guid id)
+        private static bool ProductExist(Product product,out Guid id)
         {
             for (int i = 0; i < products.Count; i++)
             {

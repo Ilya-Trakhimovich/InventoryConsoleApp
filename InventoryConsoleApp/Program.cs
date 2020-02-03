@@ -7,11 +7,10 @@ namespace InventoryConsoleApp
     class Program
     {
         private static int chooseItem = 0;
-        static string[] nameMenuItems = new string[] { "Add to inventory", "Show Inventory" };
+        static string[] nameMenuItems = new string[] { "Add to inventory", "Show Inventory", "Show Basket", "Clear Basket" };
 
         static void Main(string[] args)
         {
-            
             ShowMenu();
             CheckKey();
         }
@@ -19,6 +18,7 @@ namespace InventoryConsoleApp
         static void ShowMenu()
         {
             Console.Clear();
+
             for (int i = 0; i < nameMenuItems.Length; i++)
             {
                 if (chooseItem == i)
@@ -101,13 +101,27 @@ namespace InventoryConsoleApp
                     ShowMenu();
 
                     break;
+                case (int)MenuItems.ShowBasket:
+                    Basket.ShowBasket();
+                    chooseItem = 0;
+                    ShowMenu();
+                    
+                    break;
+                case (int)MenuItems.ClearBasket:
+                    Basket.ClearBasket();
+                    chooseItem = 0;
+                    ShowMenu();
+
+                    break;
             }
         }
 
         enum MenuItems
         {
             AddToInventory,
-            ShowInventory
+            ShowInventory,
+            ShowBasket,
+            ClearBasket
         }
     }
 }

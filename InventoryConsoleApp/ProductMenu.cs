@@ -7,7 +7,12 @@ namespace InventoryConsoleApp
     class ProductMenu
     {
         private int _productNumber;
-        static string[] nameMenuItems = new string[] { "Delete some count of products", "Delete this product full", "Add some count product", "Change price" };
+        static string[] nameMenuItems = new string[] { $"Delete some count of products",
+            "Delete this product full",
+            "Add some count product",
+            "Change price",
+            "Add to basket"
+        };
         List<Product> _productsTemp = new List<Product>();
         private int chooseMenu;
 
@@ -16,7 +21,8 @@ namespace InventoryConsoleApp
             RemoveCountProducts,
             RemoveProduct,
             AddCountProduct,
-            ChangePrice
+            ChangePrice,
+            BasketAdd
         }
 
         public ProductMenu(int productNumber, List<Product> products)
@@ -48,8 +54,11 @@ namespace InventoryConsoleApp
                         ShowProductInfo(_productNumber);
                         ShowMenu();
                     }
+                    else
+                    {
+                        CheckKey();
+                    }
 
-                    CheckKey();
                     break;
                 case ConsoleKey.UpArrow:
                     if (chooseMenu > 1)
@@ -58,8 +67,11 @@ namespace InventoryConsoleApp
                         ShowProductInfo(_productNumber);
                         ShowMenu();
                     }
+                    else
+                    {
+                        CheckKey();
+                    }
 
-                    CheckKey();
                     break;
                 case ConsoleKey.Enter:
                     Console.Clear();
@@ -85,10 +97,21 @@ namespace InventoryConsoleApp
                     {
                         Console.WriteLine("Please write only one number");
                     }
-                    _productsTemp[_productNumber]._count -= tempCount;
 
-                    ShowProductInfo(_productNumber);
-                    ShowMenu();
+                    if (tempCount >= _productsTemp[_productNumber]._count)
+                    {
+                        Console.WriteLine("Product removed. Press any key to continue");
+                        _productsTemp.RemoveAt(_productNumber);
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        _productsTemp[_productNumber]._count -= tempCount;
+
+                        ShowProductInfo(_productNumber);
+                        ShowMenu();
+                    }
+                   
                     break;
 
                 case (int)ProductMenuItems.RemoveProduct:
@@ -104,6 +127,7 @@ namespace InventoryConsoleApp
                     {
                         Console.WriteLine("Please write only one number");
                     }
+
                     _productsTemp[_productNumber]._count += tempCount;
 
                     ShowProductInfo(_productNumber);
@@ -125,6 +149,34 @@ namespace InventoryConsoleApp
                     ShowProductInfo(_productNumber);
                     ShowMenu();
                     break;
+                case (int)ProductMenuItems.BasketAdd:
+                   Console.WriteLine("Write count of product");
+
+                   while (!int.TryParse(Console.ReadLine(), out tempCount))
+                   {
+                       Console.WriteLine("Please write only one number");
+                   }
+                   
+                   if(tempCount < 0)
+                       Console.WriteLine("Write only positive numbers");
+
+                   if (tempCount >= _productsTemp[_productNumber]._count)
+                   {
+                       Basket.AddToBasket(_productsTemp[_productNumber]);
+                        _productsTemp.RemoveAt(_productNumber);
+                   }
+                   else
+                   {
+                       _productsTemp[_productNumber]._count -= tempCount;
+                       Product tempProduct = new Product(_productsTemp[_productNumber]._name,tempCount,_productsTemp[_productNumber]._price);
+                       tempProduct._id = _productsTemp[_productNumber]._id;
+                       Basket.AddToBasket(tempProduct);
+                       ShowProductInfo(_productNumber);
+                       ShowMenu();
+                   }
+
+
+                   break;
             }
         }
 

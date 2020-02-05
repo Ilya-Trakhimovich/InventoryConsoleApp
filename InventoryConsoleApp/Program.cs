@@ -1,13 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Dynamic;
+using Products;
 
 namespace InventoryConsoleApp
 {
     class Program
     {
-        private static int chooseItem = 0;
-        static string[] nameMenuItems = new string[] { "Add to inventory", "Show Inventory", "Show Basket", "Clear Basket" };
+        private static int _chooseItem = 0;
+        private static readonly string[] _nameMenuItems = new string[] { "Add to inventory", "Show Inventory", "Show Basket", "Clear Basket" };
 
         static void Main(string[] args)
         {
@@ -19,44 +18,44 @@ namespace InventoryConsoleApp
         {
             Console.Clear();
 
-            for (int i = 0; i < nameMenuItems.Length; i++)
+            for (int i = 0; i < _nameMenuItems.Length; i++)
             {
-                if (chooseItem == i)
+                if (_chooseItem == i)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"----->\t{nameMenuItems[i]}");
+                    Console.WriteLine($"----->\t{_nameMenuItems[i]}");
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
                 else
                 {
-                    Console.WriteLine($"\t{nameMenuItems[i]}");
+                    Console.WriteLine($"\t{_nameMenuItems[i]}");
                 }
             }
         }
 
-        static void CheckKey()
+        private static void CheckKey()
         {
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.DownArrow:
-                    if (chooseItem < nameMenuItems.Length - 1)
+                    if (_chooseItem < _nameMenuItems.Length - 1)
                     {
-                        chooseItem++;
+                        _chooseItem++;
                         ShowMenu();
                     }
 
                     break;
                 case ConsoleKey.UpArrow:
-                    if (chooseItem > 0)
+                    if (_chooseItem > 0)
                     {
-                        chooseItem--;
+                        _chooseItem--;
                         ShowMenu();
                     }
 
                     break;
                 case ConsoleKey.Enter:
                     Console.Clear();
-                    MenuAction(chooseItem);
+                    MenuAction(_chooseItem);
                     break;
                 default:
                     break;
@@ -64,7 +63,7 @@ namespace InventoryConsoleApp
             CheckKey();
         }
 
-       static void MenuAction(int chooseItem)
+       private static void MenuAction(int chooseItem)
         {
             switch (chooseItem)
             {
@@ -116,7 +115,7 @@ namespace InventoryConsoleApp
             }
         }
 
-        enum MenuItems
+        private enum MenuItems
         {
             AddToInventory,
             ShowInventory,

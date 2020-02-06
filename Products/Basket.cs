@@ -13,7 +13,7 @@ namespace Products
 
             if (_basketProducts.Count < 1)
             {
-                Console.WriteLine("Basket is empty. Click any key to return");
+                Console.WriteLine(Messages.HelpersMessages.emptyBasket);
                 Console.ReadKey();
 
             }
@@ -60,21 +60,25 @@ namespace Products
 
         public static void AddToBasket(Product product)
         {
-            bool productExist = false;
+            bool isProductExists = false;
 
             for (int i = 0; i < _basketProducts.Count; i++)
             {
                 if (product._id == _basketProducts[i]._id)
                 {
                     _basketProducts[i]._count += product._count;
-                    productExist = true;
+                    isProductExists = true;
+                    Console.WriteLine(Messages.HelpersMessages.productInBasket);
                 }
             }
 
-            if (!productExist)
+            if (!isProductExists)
+            {
                 _basketProducts.Add(product);
+                Console.WriteLine(Messages.HelpersMessages.productInBasket);
+            }
 
-            Console.WriteLine("Product in basket. Press any key to continue");
+            Console.WriteLine("Press any key to continue");
             Console.ReadKey();
         }
 

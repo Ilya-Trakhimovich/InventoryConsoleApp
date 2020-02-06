@@ -11,13 +11,6 @@ namespace Products
         private List<Product> _productsTemp = new List<Product>();
         private int _chooseMenu;
 
-        private static readonly string[] _nameMenuItems = new string[] { $"Delete some count of products",
-            "Delete this product full",
-            "Add some count product",
-            "Change price",
-            "Add to basket"
-        };
-
         private enum ProductMenuItems
         {
             RemoveCountProducts,
@@ -50,30 +43,10 @@ namespace Products
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.DownArrow:
-                    if (_chooseMenu < _nameMenuItems.Length)
-                    {
-                        _chooseMenu++;
-                        ShowProductInfo(_productNumber);
-                        ShowMenu();
-                    }
-                    else
-                    {
-                        CheckKey();
-                    }
-
+                   MakeChoise(ConsoleKey.DownArrow);
                     break;
                 case ConsoleKey.UpArrow:
-                    if (_chooseMenu > 1)
-                    {
-                        _chooseMenu--;
-                        ShowProductInfo(_productNumber);
-                        ShowMenu();
-                    }
-                    else
-                    {
-                        CheckKey();
-                    }
-
+                    MakeChoise(ConsoleKey.UpArrow);
                     break;
                 case ConsoleKey.Enter:
                     Console.Clear();
@@ -82,6 +55,29 @@ namespace Products
                 case ConsoleKey.Backspace:
                     Console.Clear();
                     break;
+            }
+        }
+
+        private void MakeChoise(ConsoleKey key)
+        {
+            if (_chooseMenu < Messages.MenuItems._productMenuItems.Length && key == ConsoleKey.DownArrow)
+            {
+                _chooseMenu++;
+                ShowMenu();
+            }
+            else
+            {
+                CheckKey();
+            }
+
+            if (_chooseMenu > 1 && key == ConsoleKey.UpArrow)
+            {
+                _chooseMenu--;
+                ShowMenu();
+            }
+            else
+            {
+                CheckKey();
             }
         }
 
@@ -97,7 +93,7 @@ namespace Products
 
                     while (!int.TryParse(Console.ReadLine(), out tempCount))
                     {
-                        Console.WriteLine("Please write only one number");
+                        Console.WriteLine(Messages.ExceptionMessages.countError);
                     }
 
                     if (tempCount >= _productsTemp[_productNumber]._count)
@@ -110,7 +106,6 @@ namespace Products
                     {
                         _productsTemp[_productNumber]._count -= tempCount;
 
-                        ShowProductInfo(_productNumber);
                         ShowMenu();
                     }
 
@@ -123,16 +118,14 @@ namespace Products
 
                 case (int)ProductMenuItems.AddCountProduct:
 
-                    Console.WriteLine("Write count to add");
+                    Console.WriteLine(Messages.HelpersMessages.countAdd);
 
                     while (!int.TryParse(Console.ReadLine(), out tempCount))
                     {
-                        Console.WriteLine("Please write only one number");
+                        Console.WriteLine(Messages.ExceptionMessages.countError);
                     }
-
                     _productsTemp[_productNumber]._count += tempCount;
 
-                    ShowProductInfo(_productNumber);
                     ShowMenu();
                     break;
 
@@ -144,19 +137,19 @@ namespace Products
 
                     while (!Double.TryParse(Console.ReadLine(), out tempPrice))
                     {
-                        Console.WriteLine("Please write only one number");
+                        Console.WriteLine(Messages.ExceptionMessages.priceError);
                     }
                     _productsTemp[_productNumber]._price = tempPrice;
 
-                    ShowProductInfo(_productNumber);
                     ShowMenu();
                     break;
                 case (int)ProductMenuItems.BasketAdd:
-                    Console.WriteLine("Write count of product");
+
+                    Console.WriteLine(Messages.HelpersMessages.countAdd);
 
                     while (!int.TryParse(Console.ReadLine(), out tempCount))
                     {
-                        Console.WriteLine("Please write only one number");
+                        Console.WriteLine(Messages.ExceptionMessages.countError);
                     }
 
                     if (tempCount < 0)
@@ -170,10 +163,11 @@ namespace Products
                     else
                     {
                         _productsTemp[_productNumber]._count -= tempCount;
-                        Product tempProduct = new Product(_productsTemp[_productNumber]._name, tempCount, _productsTemp[_productNumber]._price);
-                        tempProduct._id = _productsTemp[_productNumber]._id;
+                        Product tempProduct = new Product(_productsTemp[_productNumber]._name,
+                            tempCount,
+                            _productsTemp[_productNumber]._price, _productsTemp[_productNumber]._id);
+
                         Basket.AddToBasket(tempProduct);
-                        ShowProductInfo(_productNumber);
                         ShowMenu();
                     }
 
@@ -184,17 +178,19 @@ namespace Products
 
         public void ShowMenu()
         {
-            for (int i = 0; i < _nameMenuItems.Length; i++)
+            ShowProductInfo(_productNumber);
+
+            for (int i = 0; i < Messages.MenuItems._productMenuItems.Length; i++)
             {
                 if (_chooseMenu - 1 == i)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"----->\t{_nameMenuItems[i]}");
+                    Console.WriteLine($"----->\t{Messages.MenuItems._productMenuItems[i]}");
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
                 else
                 {
-                    Console.WriteLine($"\t{_nameMenuItems[i]}");
+                    Console.WriteLine($"\t{Messages.MenuItems._productMenuItems[i]}");
                 }
 
             }

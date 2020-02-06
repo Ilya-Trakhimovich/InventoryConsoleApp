@@ -10,7 +10,7 @@ namespace Products
 
         public static void AddToInventory(Product product)
         {
-            if (!ProductExist(product, out Guid id))
+            if (!IsProductExists(product, out Guid id))
             {
                 _products.Add(product);
             }
@@ -24,7 +24,7 @@ namespace Products
             }
         }
 
-        private static bool ProductExist(Product product, out Guid id)
+        private static bool IsProductExists(Product product, out Guid id)
         {
             for (int i = 0; i < _products.Count; i++)
             {
@@ -34,8 +34,6 @@ namespace Products
                     return true;
                 }
             }
-
-            id = Guid.Empty;
             return false;
         }
 
@@ -44,25 +42,12 @@ namespace Products
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.DownArrow:
-                    if (_productChoose < _products.Count)
-                    {
-                        _productChoose++;
-                        ShowInventory();
-                    }
-
-                    CheckKey();
-
-                    break;
+                  MakeChoise(ConsoleKey.DownArrow);
+                  break;
 
                 case ConsoleKey.UpArrow:
-                    if (_productChoose > 1)
-                    {
-                        _productChoose--;
-                        ShowInventory();
-                    }
-
-                    CheckKey();
-                    break;
+                   MakeChoise(ConsoleKey.UpArrow);
+                   break;
 
                 case ConsoleKey.Backspace:
                     break;
@@ -80,13 +65,29 @@ namespace Products
             }
         }
 
+        private static void MakeChoise(ConsoleKey key)
+        {
+            if (_productChoose < _products.Count && key == ConsoleKey.DownArrow)
+            {
+                _productChoose++;
+                ShowInventory();
+            }
+
+            else if (_productChoose > 1 && key == ConsoleKey.UpArrow)
+            {
+                _productChoose--;
+                ShowInventory();
+            }
+            CheckKey();
+        }
+
         public static void ShowInventory()
         {
             Console.Clear();
 
             if (_products.Count > 0)
             {
-                Console.WriteLine("Press BackSpace to return in menu");
+                Console.WriteLine(Messages.HelpersMessages.backSpaceToReturn);
 
                 for (var i = 0; i < _products.Count; i++)
                 {
@@ -111,12 +112,12 @@ namespace Products
                     }
                 }
 
-                Console.WriteLine("Press BackSpace to return in menu");
+                Console.WriteLine(Messages.HelpersMessages.backSpaceToReturn);
                 CheckKey();
             }
             else
             {
-                Console.WriteLine("Inventory is empty. Press any key to back in main menu");
+                Console.WriteLine(Messages.HelpersMessages.emptyInventory);
                 Console.ReadKey();
             }
         }

@@ -43,14 +43,14 @@ namespace Products
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.DownArrow:
-                   MakeChoise(ConsoleKey.DownArrow);
+                    MakeChoise(ConsoleKey.DownArrow);
                     break;
                 case ConsoleKey.UpArrow:
                     MakeChoise(ConsoleKey.UpArrow);
                     break;
                 case ConsoleKey.Enter:
                     Console.Clear();
-                    MenuItem(_chooseMenu - 1);
+                    MenuItem(_chooseMenu-1);
                     break;
                 case ConsoleKey.Backspace:
                     Console.Clear();
@@ -83,96 +83,107 @@ namespace Products
 
         private void MenuItem(int item)
         {
-            int tempCount;
-
-            switch (item)
+            switch ((ProductMenuItems)item)
             {
-                case (int)ProductMenuItems.RemoveCountProducts:
-
-                    Console.WriteLine("Write count to remove");
-
-                    while (!int.TryParse(Console.ReadLine(), out tempCount))
-                    {
-                        Console.WriteLine(Messages.ExceptionMessages.countError);
-                    }
-
-                    if (tempCount >= _productsTemp[_productNumber]._count)
-                    {
-                        Console.WriteLine("Product removed. Press any key to continue");
-                        _productsTemp.RemoveAt(_productNumber);
-                        Console.ReadKey();
-                    }
-                    else
-                    {
-                        _productsTemp[_productNumber]._count -= tempCount;
-
-                        ShowMenu();
-                    }
-
+                case ProductMenuItems.RemoveCountProducts:
+                    RemoveCountProduct();
                     break;
-
-                case (int)ProductMenuItems.RemoveProduct:
-
+                case ProductMenuItems.RemoveProduct:
                     _productsTemp.RemoveAt(_productNumber);
                     break;
-
-                case (int)ProductMenuItems.AddCountProduct:
-
-                    Console.WriteLine(Messages.HelpersMessages.countAdd);
-
-                    while (!int.TryParse(Console.ReadLine(), out tempCount))
-                    {
-                        Console.WriteLine(Messages.ExceptionMessages.countError);
-                    }
-                    _productsTemp[_productNumber]._count += tempCount;
-
-                    ShowMenu();
+                case ProductMenuItems.AddCountProduct:
+                    AddCountProduct();
                     break;
-
-                case (int)ProductMenuItems.ChangePrice:
-
-                    double tempPrice;
-
-                    Console.WriteLine("Write new price");
-
-                    while (!Double.TryParse(Console.ReadLine(), out tempPrice))
-                    {
-                        Console.WriteLine(Messages.ExceptionMessages.priceError);
-                    }
-                    _productsTemp[_productNumber]._price = tempPrice;
-
-                    ShowMenu();
+                case ProductMenuItems.ChangePrice:
+                    ChangePriceProduct();
                     break;
-                case (int)ProductMenuItems.BasketAdd:
-
-                    Console.WriteLine(Messages.HelpersMessages.countAdd);
-
-                    while (!int.TryParse(Console.ReadLine(), out tempCount))
-                    {
-                        Console.WriteLine(Messages.ExceptionMessages.countError);
-                    }
-
-                    if (tempCount < 0)
-                        Console.WriteLine("Write only positive numbers");
-
-                    if (tempCount >= _productsTemp[_productNumber]._count)
-                    {
-                        Basket.AddToBasket(_productsTemp[_productNumber]);
-                        _productsTemp.RemoveAt(_productNumber);
-                    }
-                    else
-                    {
-                        _productsTemp[_productNumber]._count -= tempCount;
-                        Product tempProduct = new Product(_productsTemp[_productNumber]._name,
-                            tempCount,
-                            _productsTemp[_productNumber]._price, _productsTemp[_productNumber]._id);
-
-                        Basket.AddToBasket(tempProduct);
-                        ShowMenu();
-                    }
-
-
+                case ProductMenuItems.BasketAdd:
+                    AddToBasket();
                     break;
+            }
+        }
+
+        private void AddToBasket()
+        {
+            int tempCount = 0;
+            Console.WriteLine(Messages.HelpersMessages.countAdd);
+
+            while (!int.TryParse(Console.ReadLine(), out tempCount))
+            {
+                Console.WriteLine(Messages.ExceptionMessages.countError);
+            }
+
+            if (tempCount < 0)
+                Console.WriteLine("Write only positive numbers");
+
+            if (tempCount >= _productsTemp[_productNumber]._count)
+            {
+                Basket.AddToBasket(_productsTemp[_productNumber]);
+                _productsTemp.RemoveAt(_productNumber);
+            }
+            else
+            {
+                _productsTemp[_productNumber]._count -= tempCount;
+                Product tempProduct = new Product(_productsTemp[_productNumber]._name,
+                    tempCount,
+                    _productsTemp[_productNumber]._price,
+                    _productsTemp[_productNumber]._id);
+
+                Basket.AddToBasket(tempProduct);
+                ShowMenu();
+            }
+        }
+
+        private void ChangePriceProduct()
+        {
+
+            double tempPrice;
+            Console.WriteLine("Write new price");
+
+            while (!Double.TryParse(Console.ReadLine(), out tempPrice))
+            {
+                Console.WriteLine(Messages.ExceptionMessages.priceError);
+            }
+            _productsTemp[_productNumber]._price = tempPrice;
+
+            ShowMenu();
+        }
+
+        private void AddCountProduct()
+        {
+            int tempCount = 0;
+            Console.WriteLine(Messages.HelpersMessages.countAdd);
+
+            while (!int.TryParse(Console.ReadLine(), out tempCount))
+            {
+                Console.WriteLine(Messages.ExceptionMessages.countError);
+            }
+
+            _productsTemp[_productNumber]._count += tempCount;
+            ShowMenu();
+        }
+
+        private void RemoveCountProduct()
+        {
+            Console.WriteLine("Write count to remove");
+            int tempCount = 0;
+
+            while (!int.TryParse(Console.ReadLine(), out tempCount))
+            {
+                Console.WriteLine(Messages.ExceptionMessages.countError);
+            }
+
+            if (tempCount >= _productsTemp[_productNumber]._count)
+            {
+                Console.WriteLine("Product removed. Press any key to continue");
+                _productsTemp.RemoveAt(_productNumber);
+                Console.ReadKey();
+            }
+            else
+            {
+                _productsTemp[_productNumber]._count -= tempCount;
+
+                ShowMenu();
             }
         }
 

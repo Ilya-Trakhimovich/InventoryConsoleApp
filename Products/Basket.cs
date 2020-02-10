@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Products
 {
@@ -21,14 +22,12 @@ namespace Products
             {
                 Console.Write($"The cost of everything in the basket: {GetCost()}\n");
 
-                for (var i = 0; i < _basketProducts.Count; i++)
+                foreach (var product in _basketProducts)
                 {
-                    Product product = _basketProducts[i];
-
                     Console.WriteLine($"Product name is {product._name}\t" +
-                                          $"Product count is {product._count}\t" +
-                                          $"Product price is {product._price}\t" +
-                                          $"Product id is {product._id}");
+                                      $"Product count is {product._count}\t" +
+                                      $"Product price is {product._price}\t" +
+                                      $"Product id is {product._id}");
                 }
 
                 Console.WriteLine("Press any key to return in menu");
@@ -40,9 +39,9 @@ namespace Products
         {
             if (_basketProducts.Count > 1)
             {
-                for (int i = 0; i < _basketProducts.Count; i++)
+                foreach (var product in _basketProducts)
                 {
-                    Inventory.AddToInventory(_basketProducts[i]);
+                    Inventory.AddToInventory(product);
                 }
 
                 Console.WriteLine("Basket is clear.\n" +
@@ -62,11 +61,11 @@ namespace Products
         {
             bool isProductExists = false;
 
-            for (int i = 0; i < _basketProducts.Count; i++)
+            foreach (var prod in _basketProducts)
             {
-                if (product._id == _basketProducts[i]._id)
+                if (prod._id == product._id)
                 {
-                    _basketProducts[i]._count += product._count;
+                    prod._count += product._count;
                     isProductExists = true;
                     Console.WriteLine(Messages.HelpersMessages.productInBasket);
                 }
@@ -82,16 +81,6 @@ namespace Products
             Console.ReadKey();
         }
 
-        private static double GetCost()
-        {
-            double cost = 0;
-
-            foreach (var basketProduct in _basketProducts)
-            {
-                cost += basketProduct._count * basketProduct._price;
-            }
-
-            return cost;
-        }
+        private static double GetCost() =>_basketProducts.Select(product => product._count * product._price).Sum();
     }
 }

@@ -71,18 +71,18 @@ namespace InventoryConsoleApp
 
        private static void MenuAction(int chooseItem)
         {
-            switch (chooseItem)
+            switch ((MenuItems)chooseItem)
             {
-                case (int)MenuItems.AddToInventory:
+                case MenuItems.AddToInventory:
                     Inventory.AddToInventory(MakeSomeProduct());
                     break;
-                case (int)MenuItems.ShowInventory:
+                case MenuItems.ShowInventory:
                     Inventory.ShowInventory();
                     break;
-                case (int)MenuItems.ShowBasket:
+                case MenuItems.ShowBasket:
                     Basket.ShowBasket();
                     break;
-                case (int)MenuItems.ClearBasket:
+                case MenuItems.ClearBasket:
                     Basket.ClearBasket();
                     break;
             }

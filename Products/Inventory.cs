@@ -16,10 +16,10 @@ namespace Products
             }
             else
             {
-                for (int i = 0; i < _products.Count; i++)
+                foreach (var prod in _products)
                 {
-                    if (_products[i]._id == id)
-                        _products[i]._count += product._count;
+                    if (prod._id == id)
+                        prod._count += product._count;
                 }
             }
         }
@@ -54,7 +54,6 @@ namespace Products
 
                 case ConsoleKey.Enter:
                     ProductMenu productMenu = new ProductMenu(_productChoose - 1, _products);
-                    productMenu.ShowProductInfo(_productChoose - 1);
                     productMenu.ShowMenu();
 
                     _products = productMenu.GetNewProductList();
